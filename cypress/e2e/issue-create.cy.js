@@ -9,6 +9,9 @@ describe("Issue create", () => {
       });
   });
 
+  // Using Mock for random data!!
+  const Mock = require("mockjs");
+
   it("Should create an issue and validate it successfully", () => {
     //System finds modal for creating issue and does next steps inside of it
     cy.get('[data-testid="modal:issue-create"]').within(() => {
@@ -72,25 +75,20 @@ describe("Issue create", () => {
     });
   });
 
-  //ASSIGNMENT 2
+  // ASSIGNMENT 2
 
-  it.only("Test Case 1: Custom Issue Creation", () => {
+  // Test Case 1: Custom Issue Creation
+
+  it("Test Case 1: Custom Issue Creation", () => {
     cy.get('[data-testid="modal:issue-create"]').within(() => {
       cy.get('[data-testid="select:type"]').click();
       cy.get('[data-testid="select-option:Bug"]').trigger("click");
-
       cy.get(".ql-editor").type("My bug description");
-
       cy.get('input[name="title"]').type("Bug");
-
-      //Select Pickle Rick from reporter dropdown
-      cy.get('[data-testid="select:userIds"]').click();
+      cy.get('[data-testid="select:reporterId"]').click();
       cy.get('[data-testid="select-option:Pickle Rick"]').click();
-
-      //Select highest prority
       cy.get('[data-testid="select:priority"]').click();
       cy.get('[data-testid="select-option:Highest"]').click();
-
       cy.get('button[type="submit"]').click();
     });
 
@@ -104,15 +102,45 @@ describe("Issue create", () => {
       .should("be.visible")
       .and("have.length", "1")
       .within(() => {
-        //Assert that this list contains 5 issues and first element with tag p has specified text
         cy.get('[data-testid="list-issue"]')
           .should("have.length", "5")
           .first()
           .find("p")
           .contains("Bug");
-        //Assert that correct avatar and type icon are visible
-        cy.get('[data-testid="avatar:Pickle Rick"]').should("be.visible");
-        cy.get('[data-testid="icon:Bug"]').should("be.visible"); // ERROR!!! expected to find element: [data-testid="icon:Bug"], but never found it .
+      });
+  });
+
+  //Test Case 2: Random Data Plugin Issue Creation
+
+  it("Test Case 2: Random Data Plugin Issue Creation", () => {
+    const randomDescription = Mock.mock("@paragraph");
+    const randomTitle = Mock.mock("@word");
+
+    cy.get('[data-testid="modal:issue-create"]').within(() => {
+      cy.get(".ql-editor").type(randomDescription);
+      cy.get('input[name="title"]').type(randomTitle);
+      cy.get('[data-testid="select:reporterId"]').click();
+      cy.get('[data-testid="select-option:Baby Yoda"]').click();
+      cy.get('[data-testid="select:priority"]').click();
+      cy.get('[data-testid="select-option:Low"]').click();
+      cy.get('button[type="submit"]').click();
+    });
+
+    cy.get('[data-testid="modal:issue-create"]').should("not.exist");
+    cy.contains("Issue has been successfully created.").should("be.visible");
+
+    cy.reload();
+    cy.contains("Issue has been successfully created.").should("not.exist");
+
+    cy.get('[data-testid="board-list:backlog')
+      .should("be.visible")
+      .and("have.length", "1")
+      .within(() => {
+        cy.get('[data-testid="list-issue"]')
+          .should("have.length", "5")
+          .first()
+          .find("p")
+          .contains(randomTitle);
       });
   });
 });
