@@ -67,42 +67,22 @@ describe("Issue details editing", () => {
       cy.get(".ql-snow").should("have.text", description);
     });
 
-  const getIssueDetailsModal = () =>
-    cy.get('[data-testid="modal:issue-details"]');
-});
+    const getIssueDetailsModal = () =>
+      cy.get('[data-testid="modal:issue-details"]');
+  });
 
-//TASK 1
+  // TASK 1
+  // TASK 2
 
-describe("Issue Detail Page - Priority Dropdown", () => {
-  const expectedLength = 5;
-  let priorityOptionsArray = [];
-
-  it.only("should match the expected length and content of the Priority dropdown", () => {
-    // Get the initially selected priority value
-    const initiallySelectedPriority = cy
-      .get('[data-testid="priority-dropdown"]')
-      .find("option:selected") // Assuming dropdown options are 'option' elements
-      .invoke("text");
-
-    // Push the initially selected priority into the array
-    priorityOptionsArray.push(initiallySelectedPriority);
-
-    // Access the list of all priority options
-    cy.get('[data-testid="priority-dropdown"]')
-      .find("option:not(:disabled)") // Assuming dropdown options are 'option' elements
-      .each(($option) => {
-        // Invoke the text value from the current element and save it into the array
-        const priorityText = $option.invoke("text").trim();
-        priorityOptionsArray.push(priorityText);
-
-        // Print out the added value and length of the array during each iteration
-        cy.log(
-          `Added value: ${priorityText}, Array length: ${priorityOptionsArray.length}`
-        );
-      })
-      .then(() => {
-        // Assert that the array created has the same length as the predefined number
-        expect(priorityOptionsArray.length).to.equal(expectedLength);
+  it.only("Should only contain characters", () => {
+    cy.get('[data-testid="select:reporter"]')
+      .invoke("text")
+      .then((reporterName) => {
+        const regex = /^[A-Za-z\s]+$/;
+        expect(regex.test(reporterName)).to.be.true;
       });
+
+    // TASK 3
+    // TASK 4
   });
 });

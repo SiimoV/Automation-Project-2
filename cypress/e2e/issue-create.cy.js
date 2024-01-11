@@ -79,7 +79,7 @@ describe("Issue create", () => {
 
   // Test Case 1: Custom Issue Creation
 
-  it("Test Case 1: Custom Issue Creation", () => {
+  it.only("Test Case 1: Custom Issue Creation", () => {
     cy.get('[data-testid="modal:issue-create"]').within(() => {
       cy.get('[data-testid="select:type"]').click();
       cy.get('[data-testid="select-option:Bug"]').trigger("click");
